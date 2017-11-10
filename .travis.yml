@@ -5,7 +5,7 @@ env:
   - CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
   #- CN1_RUNTESTS_JAVASE=1
   #- CN1_RUNTESTS_IOS_DEVICE=1
-before_script:
-  - brew install ant
+#before_script:
+#  - brew install ant
 script:
   - bash .travis/build.sh
