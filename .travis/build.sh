@@ -47,17 +47,17 @@ cd $PROJECT_DIR
 ant jar || exit 1
 
 # Run Tests Against JavaSE
-if [[ -n $CN1_RUNTESTS_JAVASE ]]; then
+if [[ -n ${CN1_RUNTESTS_JAVASE} ]]; then
   $CN1 install-tests
   ant -f tests.xml test-javase || exit 1
 fi
 
-if [[ -n $CN1_RUNTESTS_IOS_SIMULATOR ]]; then
+if [[ -n ${CN1_RUNTESTS_IOS_SIMULATOR} && -n ${CN1PASS} && -n ${CN1USER} ]]; then
   $CN1 install-appium-tests
-  ant -f appium.xml test-ios-appium-simulator -Dcn1.iphone.target=debug_iphone_steve || exit 1
+  ant -f appium.xml test-ios-appium-simulator -Dcn1.iphone.target=debug_iphone_steve -Dcn1user=${CN1USER} -Dcn1password=${CN1PASS} || exit 1
 fi
 
-if [[ -n $CN1_RUNTESTS_IOS_DEVICE ]]; then
+if [[ -n $CN1_RUNTESTS_IOS_DEVICE && -n ${CN1PASS} && -n ${CN1USER} ]]; then
   $CN1 install-appium-tests
-  ant -f appium.xml test-ios-appium-device || exit 1
+  ant -f appium.xml test-ios-appium-device -Dcn1user=${CN1USER} -Dcn1password=${CN1PASS} || exit 1
 fi
