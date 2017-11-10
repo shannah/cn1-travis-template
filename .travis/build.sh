@@ -48,12 +48,16 @@ ant jar || exit 1
 
 # Run Tests Against JavaSE
 if [[ -n $CN1_RUNTESTS_JAVASE ]]; then
-  ant compile-test
-  java -cp dist/unitTests.jar:JavaSE.jar com.codename1.impl.javase.TestRunner
+  $CN1 install-tests
+  ant -f tests.xml test-javase || exit 1
 fi
 
-if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
- $SCRIPTPATH/build-osx.sh
-else
-    # Install some custom requirements on Linux
+if [[ -n $CN1_RUNTESTS_IOS_SIMULATOR ]]; then
+  $CN1 install-appium-tests
+  ant -f appium.xml test-ios-appium-simulator -Dcn1.iphone.target=debug_iphone_steve || exit 1
+fi
+
+if [[ -n $CN1_RUNTESTS_IOS_DEVICE ]]; then
+  $CN1 install-appium-tests
+  ant -f appium.xml test-ios-appium-device || exit 1
 fi

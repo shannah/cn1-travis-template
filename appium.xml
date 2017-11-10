@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="AppiumTests" default="test-ios-appium-simulator" basedir=".">
+    <description>Appium tests</description>
+    <import file="build.xml"/>
+    <property name="cn1.iphone.target" value="iphone"/>
+    <target name="test-ios-appium-simulator" 
+            description="Test in iOS simulator"
+            depends="clean,copy-ios-override,copy-libs,compile-test,clean-override">
+        <codeNameOne 
+            jarFile="dist/unitTests.jar"
+            displayName="${codename1.displayName}"
+            packageName = "${codename1.packageName}"
+            mainClassName = "${codename1.mainName}"
+            version="${codename1.version}"
+            icon="${codename1.icon}"
+            vendor="${codename1.vendor}"
+            subtitle="${codename1.secondaryTitle}"
+            buildArgs="build.unitTest=1,codename1.arg.ios.buildForSimulator=true"
+            targetType="${cn1.iphone.target}"
+            certificate="${codename1.ios.debug.certificate}"
+            certPassword="${codename1.ios.debug.certificatePassword}"
+            provisioningProfile="${codename1.ios.debug.provision}"
+            appid="${codename1.ios.appid}"
+            automated="true"
+        />
+        <unzip src="dist/result.zip" dest="dist" overwrite="true"/>
+        <unzip src="dist/CodenameOneUnitTestExecutor.app.ipa" dest="dist/CodenameOneUnitTestExecutor.app" overwrite="true"/>
+        <!-- it's not really an .ipa file.  just a zip file with an .app inside
+        it -->
+            
+        <get src="https://github.com/shannah/cn1-appium-ios/archive/master.zip"
+             dest="dist"/>
+        <unzip src="dist/master.zip" dest="dist" overwrite="true"/>
+        <exec executable="mvn" dir="dist/cn1-appium-ios-master" failonerror="true">
+            <arg value="test"/>
+            <arg value="-e"/>
+            <arg value="-Dapp=../CodenameOneUnitTestExecutor.app"/>
+            <!--  Uncomment/Customize as appropriate for your environment -->
+            <!-- <arg value="-Dappium.url=http://127.0.0.1:4723/wd/hub"/> -->
+            <!-- <arg value="-DdeviceName='iPhone 6s'"/> -->
+            <!-- <arg value="-DplatformVersion=10.2"/> -->
+            
+        </exec>
+    </target>
+    <target name="test-ios-appium-device" 
+            description="Test on iOS Device"
+            depends="clean,copy-ios-override,copy-libs,compile-test,clean-override">
+        <codeNameOne 
+            jarFile="dist/unitTests.jar"
+            displayName="${codename1.displayName}"
+            packageName = "${codename1.packageName}"
+            mainClassName = "${codename1.mainName}"
+            version="${codename1.version}"
+            icon="${codename1.icon}"
+            vendor="${codename1.vendor}"
+            subtitle="${codename1.secondaryTitle}"
+            buildArgs="build.unitTest=1,codename1.arg.ios.buildForSimulator=true"
+            targetType="${cn1.iphone.target}"
+            certificate="${codename1.ios.debug.certificate}"
+            certPassword="${codename1.ios.debug.certificatePassword}"
+            provisioningProfile="${codename1.ios.debug.provision}"
+            appid="${codename1.ios.appid}"
+            automated="true"
+        />
+        <unzip src="dist/result.zip" dest="dist" overwrite="true"/>
+        
+        <!-- it's not really an .ipa file.  just a zip file with an .app inside
+        it -->
+        <get src="https://github.com/shannah/cn1-appium-ios/archive/master.zip"
+             dest="dist"/>
+        <unzip src="dist/master.zip" dest="dist" overwrite="true"/>
+        <exec executable="mvn" dir="dist/cn1-appium-ios-master" failonerror="true">
+            <arg value="test"/>
+            <arg value="-e"/>
+            <arg value="-Dapp=../CodenameOneUnitTestExecutor.ipa"/>
+            <!--  Uncomment/Customize as appropriate for your environment -->
+            <!-- <arg value="-Dappium.url=http://127.0.0.1:4723/wd/hub"/> -->
+            <!-- <arg value="-DdeviceName='iPhone 6s'"/> -->
+            <!-- <arg value="-DplatformVersion=10.2"/> -->
+            
+        </exec>
+    </target>
+    
+</project>
