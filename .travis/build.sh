@@ -20,26 +20,28 @@ $CN1 install-tests
 # If CN1_SOURCES environment variable is set, then we download the CN1_SOURCES
 # And build against those
 if [[ -n ${CN1_SOURCES} ]]; then
-  curl -L ${CN1_SOURCES} > master.zip
-  unzip master.zip -d ../
-  mv ../cn1-binaries-master ../cn1-binaries
-  rm master.zip
-  curl -L https://github.com/codenameone/codenameone-skins/archive/master.zip >master.zip
-  unzip master.zip -d ../
-  mv ../codenameone-skins-master ../codenameone-skins
-  cd ../codenameone-skins
-  ./build_skins.sh
-  mv ../CodenameOne ../cn1
-  cd ../cn1
-  cd CodenameOne
+  curl -L ${CN1_SOURCES} > master.zip || exit 1
+  unzip master.zip -d ../ || exit 1
+  rm master.zip || exit 1
+  curl -L https://github.com/codenameone/cn1-binares/archive/master.zip >master.zip || exit 1
+  mv ../cn1-binaries-master ../cn1-binaries || exit 1
+  rm master.zip || exit 1
+  curl -L https://github.com/codenameone/codenameone-skins/archive/master.zip >master.zip || exit 1
+  unzip master.zip -d ../ || exit 1
+  mv ../codenameone-skins-master ../codenameone-skins || exit 1
+  cd ../codenameone-skins || exit 1
+  ./build_skins.sh || exit 1
+  mv ../CodenameOne ../cn1 || exit 1
+  cd ../cn1 || exit 1
+  cd CodenameOne || exit 1
   ant jar || exit 1
-  cd ../CodenameOneDesigner
+  cd ../CodenameOneDesigner || exit 1
   mkdir dist
   mkdir dist/lib
   ant release || exit 1
-  cp ../CodenameOne/dist/CodenameOne.jar $PROJECT_DIR/lib/CodenameOne.jar
-  cp ../CodenameOne/Ports/CLDC11/dist/CLDC11.jar $PROJECT_DIR/lib/CLDC11.jar
-  cp ../CodenameOne/Ports/JavaSE/dist/JavaSE.jar $PROJECT_DIR/JavaSE.jar
+  cp ../CodenameOne/dist/CodenameOne.jar $PROJECT_DIR/lib/CodenameOne.jar || exit 1
+  cp ../CodenameOne/Ports/CLDC11/dist/CLDC11.jar $PROJECT_DIR/lib/CLDC11.jar || exit 1
+  cp ../CodenameOne/Ports/JavaSE/dist/JavaSE.jar $PROJECT_DIR/JavaSE.jar || exit 1
 fi
 
 # Build the project
