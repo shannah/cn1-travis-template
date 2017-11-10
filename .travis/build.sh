@@ -15,7 +15,7 @@ cd $PROJECT_DIR
 
 # Install missing jar files into project
 $CN1 install-jars || exit 1
-$CN1 install-tests || exit 1
+$CN1 install-tests
 
 # If CN1_SOURCES environment variable is set, then we download the CN1_SOURCES
 # And build against those
