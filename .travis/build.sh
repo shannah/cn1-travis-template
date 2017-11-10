@@ -20,11 +20,11 @@ $CN1 install-tests
 # If CN1_SOURCES environment variable is set, then we download the CN1_SOURCES
 # And build against those
 if [[ -n ${CN1_SOURCES} ]]; then
-  curl ${CN1_SOURCES} > master.zip
+  curl -L ${CN1_SOURCES} > master.zip
   unzip master.zip -d ../
   mv ../cn1-binaries-master ../cn1-binaries
   rm master.zip
-  curl https://github.com/codenameone/codenameone-skins/archive/master.zip >master.zip
+  curl -L https://github.com/codenameone/codenameone-skins/archive/master.zip >master.zip
   unzip master.zip -d ../
   mv ../codenameone-skins-master ../codenameone-skins
   cd ../codenameone-skins
