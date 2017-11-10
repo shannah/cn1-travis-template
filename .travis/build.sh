@@ -20,13 +20,15 @@ $CN1 install-tests
 # If CN1_SOURCES environment variable is set, then we download the CN1_SOURCES
 # And build against those
 if [[ -n ${CN1_SOURCES} ]]; then
-  curl -L ${CN1_SOURCES} > master.zip || exit 1
+  curl -L ${CN1_SOURCES} -o  master.zip || exit 1
   unzip master.zip -d ../ || exit 1
   rm master.zip || exit 1
-  curl -L https://github.com/codenameone/cn1-binares/archive/master.zip >master.zip || exit 1
+  mv ../CodenameOne-master ../CodenameOne
+  curl -L https://github.com/codenameone/cn1-binaries/archive/master.zip -o master.zip || exit 1
+  unzip master.zip -d ../ || exit 1
   mv ../cn1-binaries-master ../cn1-binaries || exit 1
   rm master.zip || exit 1
-  curl -L https://github.com/codenameone/codenameone-skins/archive/master.zip >master.zip || exit 1
+  curl -L https://github.com/codenameone/codenameone-skins/archive/master.zip -o master.zip || exit 1
   unzip master.zip -d ../ || exit 1
   mv ../codenameone-skins-master ../codenameone-skins || exit 1
   cd ../codenameone-skins || exit 1
@@ -39,9 +41,14 @@ if [[ -n ${CN1_SOURCES} ]]; then
   mkdir dist
   mkdir dist/lib
   ant release || exit 1
-  cp ../CodenameOne/dist/CodenameOne.jar $PROJECT_DIR/lib/CodenameOne.jar || exit 1
-  cp ../CodenameOne/Ports/CLDC11/dist/CLDC11.jar $PROJECT_DIR/lib/CLDC11.jar || exit 1
-  cp ../CodenameOne/Ports/JavaSE/dist/JavaSE.jar $PROJECT_DIR/JavaSE.jar || exit 1
+  cd ../Ports/CLDC11 || exit 1
+  ant jar || exit 1
+  cd ../JavaSE || exit 1
+  ant jar
+  cd ../..
+  cp CodenameOne/dist/CodenameOne.jar $PROJECT_DIR/lib/CodenameOne.jar || exit 1
+  cp Ports/CLDC11/dist/CLDC11.jar $PROJECT_DIR/lib/CLDC11.jar || exit 1
+  cp Ports/JavaSE/dist/JavaSE.jar $PROJECT_DIR/JavaSE.jar || exit 1
 fi
 
 # Build the project
@@ -54,7 +61,7 @@ if [[ -n ${CN1_RUNTESTS_JAVASE} ]]; then
   ant -f tests.xml test-javase || exit 1
 fi
 
-if [[ -n ${CN1_RUNTESTS_IOS_SIMULATOR} && -n ${CN1PASS} && -n ${CN1USER} ]]; then
+if [[ -n ${CN1_RUNTESTS_IOS_SIMULATOR} ]]; then
   $CN1 install-appium-tests
   ant -f appium.xml test-ios-appium-simulator -Dcn1.iphone.target=debug_iphone_steve -Dcn1user=${CN1USER} -Dcn1password=${CN1PASS} || exit 1
 fi
