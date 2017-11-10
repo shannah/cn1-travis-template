@@ -22,4 +22,10 @@ matrix:
       env: DEVICE=11.0 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
 
 script:
+  - curl -L http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.6-bin.tar.gz -o apache-ant-1.9.6-bin.tar.gz
+  - tar xfz apache-ant-1.9.6-bin.tar --directory ../
+  - export PATH=`pwd`/../apache-ant-1.9.6/bin:$PATH
+  - curl -L https://archive.apache.org/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz -o apache-maven-3.2.3-bin.tar.gz
+  - tar xvfz apache-maven-3.2.3-bin.tar.gz --directory ../
+  - export PATH=`pwd`/../apache-maven-3.2.3/bin:$PATH
   - bash .travis/build.sh
