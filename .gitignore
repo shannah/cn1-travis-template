@@ -1,0 +1,7 @@
+dist
+build
+private
+JavaSE.jar
+CodeNameOneBuildClient.jar
+lib/*.jar
+lib/*.zip
