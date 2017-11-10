@@ -8,6 +8,5 @@ env:
   - CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
 before_script:
   - brew install ant
-  - brew install npm
 script:
   - bash .travis/build.sh
