@@ -68,7 +68,9 @@ if [[ -n ${CN1_RUNTESTS_IOS_SIMULATOR} ]]; then
   echo "Installing appium..."
   npm install appium || exit 1
   ./node_modules/.bin/appium &
+  APPIUM_PID=$!
   ant -f appium.xml test-ios-appium-simulator -Dcn1.iphone.target=debug_iphone_steve -Dcn1user=${CN1USER} -Dcn1password=${CN1PASS} || exit 1
+  kill $APPIUM_PID
 fi
 
 if [[ -n $CN1_RUNTESTS_IOS_DEVICE && -n ${CN1PASS} && -n ${CN1USER} ]]; then
@@ -76,5 +78,7 @@ if [[ -n $CN1_RUNTESTS_IOS_DEVICE && -n ${CN1PASS} && -n ${CN1USER} ]]; then
   echo "Installing appium..."
   npm install appium || exit 1
   ./node_modules/.bin/appium &
+  APPIUM_PID=$!
   ant -f appium.xml test-ios-appium-device -Dcn1user=${CN1USER} -Dcn1password=${CN1PASS} || exit 1
+  kill $APPIUM_PID
 fi
