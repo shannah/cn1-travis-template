@@ -5,6 +5,8 @@ SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 PROJECT_DIR=`pwd`
 
 # Install Codename One CLI tools
+echo "Current directory: "
+echo `pwd`
 cd ..
 mkdir codenameone-cli
 cd codenameone-cli
@@ -63,10 +65,18 @@ fi
 
 if [[ -n ${CN1_RUNTESTS_IOS_SIMULATOR} ]]; then
   $CN1 install-appium-tests
+  mkdir appium || exit 1
+  cd appium || exit 1
+  npm install appium || exit 1
+  ./node_modules/.bin/appium &
   ant -f appium.xml test-ios-appium-simulator -Dcn1.iphone.target=debug_iphone_steve -Dcn1user=${CN1USER} -Dcn1password=${CN1PASS} || exit 1
 fi
 
 if [[ -n $CN1_RUNTESTS_IOS_DEVICE && -n ${CN1PASS} && -n ${CN1USER} ]]; then
   $CN1 install-appium-tests
+  mkdir appium || exit 1
+  cd appium || exit 1
+  npm install appium || exit 1
+  ./node_modules/.bin/appium &
   ant -f appium.xml test-ios-appium-device -Dcn1user=${CN1USER} -Dcn1password=${CN1PASS} || exit 1
 fi
