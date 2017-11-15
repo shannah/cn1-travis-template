@@ -1,4 +1,6 @@
-
+env:
+  global:
+    - CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
 matrix:
   include:
     - language: android
@@ -12,35 +14,35 @@ matrix:
           - sys-img-armeabi-v7a-google_apis-18
 
     - osx_image: xcode7.3
-      env: CN1_PLATFORM=ios DEVICE=9.3 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
+      env: CN1_PLATFORM=ios DEVICE=9.3 CN1_RUNTESTS_IOS_SIMULATOR=1
       sudo: required
       os: osx
       language: node_js
 
     - osx_image: xcode8.3
       node_js: "6"
-      env: CN1_PLATFORM=ios DEVICE=9.3 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
+      env: CN1_PLATFORM=ios DEVICE=9.3 CN1_RUNTESTS_IOS_SIMULATOR=1
       sudo: required
       os: osx
       language: node_js
 
     - osx_image: xcode8.3
       node_js: "6"
-      env: CN1_PLATFORM=ios DEVICE=10.3 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
+      env: CN1_PLATFORM=ios DEVICE=10.3 CN1_RUNTESTS_IOS_SIMULATOR=1
       sudo: required
       os: osx
       language: node_js
 
     - osx_image: xcode9
       node_js: "6"
-      env: CN1_PLATFORM=ios DEVICE=10.3 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
+      env: CN1_PLATFORM=ios DEVICE=10.3 CN1_RUNTESTS_IOS_SIMULATOR=1
       sudo: required
       os: osx
       language: node_js
 
     - osx_image: xcode9
       node_js: "6"
-      env: CN1_PLATFORM=ios DEVICE=11.0 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
+      env: CN1_PLATFORM=ios DEVICE=11.0 CN1_RUNTESTS_IOS_SIMULATOR=1
       sudo: required
       os: osx
       language: node_js
@@ -63,6 +65,6 @@ script:
       export PATH=`pwd`/../apache-maven-3.2.3/bin:$PATH
       bash .travis/build.sh
     fi
-  - if [ "${CN1_PLATFORM}" == "android"]; then
+  - if [ "${CN1_PLATFORM}" == "android" ]; then
       echo "We are in android"
     fi
