@@ -16,7 +16,7 @@ matrix:
 
     - osx_image: xcode9
       node_js: "6"
-      env: DEVICE=10.3
+      env: DEVICE=10.3 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
     - osx_image: xcode9
       node_js: "6"
       env: DEVICE=11.0 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
