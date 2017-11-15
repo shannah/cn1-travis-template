@@ -34,14 +34,19 @@ matrix:
     - osx_image: xcode9
       node_js: "6"
       env: CN1_PLATFORM=ios DEVICE=10.3 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
+      sudo: required
+      os: osx
+      language: node_js
+
     - osx_image: xcode9
       node_js: "6"
       env: CN1_PLATFORM=ios DEVICE=11.0 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
       sudo: required
       os: osx
       language: node_js
+
 before_script:
-  - if [ "${CN!_PLATFORM}" == "android" ]; then
+  - if [ "${CN1_PLATFORM}" == "android" ]; then
       nvm install 6
       echo `which node`
       android list targets
