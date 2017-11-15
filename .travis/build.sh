@@ -3,7 +3,7 @@
 # SET UP ENVIRONMENT
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 PROJECT_DIR=`pwd`
-
+export JAVA_HOME=$(/usr/libexec/java_home)
 # Install Codename One CLI tools
 echo "Current directory: "
 echo `pwd`
