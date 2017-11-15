@@ -1,31 +1,63 @@
-sudo: required
-os: osx
-language: node_js
+
 matrix:
   include:
+    - language: android
+      jdk: oraclejdk8
+      env: CN1_PLATFORM=android
+      android:
+        components:
+          - platform-tools
+          - android-18
+          - addon-google_apis-google-18
+          - sys-img-armeabi-v7a-google_apis-18
+
     - osx_image: xcode7.3
-      node_js: "6"
-      env: DEVICE=9.3 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
+      env: CN1_PLATFORM=ios DEVICE=9.3 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
+      sudo: required
+      os: osx
+      language: node_js
 
     - osx_image: xcode8.3
       node_js: "6"
-      env: DEVICE=9.3 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
+      env: CN1_PLATFORM=ios DEVICE=9.3 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
+      sudo: required
+      os: osx
+      language: node_js
+
     - osx_image: xcode8.3
       node_js: "6"
-      env: DEVICE=10.3 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
+      env: CN1_PLATFORM=ios DEVICE=10.3 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
+      sudo: required
+      os: osx
+      language: node_js
 
     - osx_image: xcode9
       node_js: "6"
-      env: DEVICE=10.3 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
+      env: CN1_PLATFORM=ios DEVICE=10.3 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
     - osx_image: xcode9
       node_js: "6"
-      env: DEVICE=11.0 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
-
+      env: CN1_PLATFORM=ios DEVICE=11.0 CN1_RUNTESTS_IOS_SIMULATOR=1 CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
+      sudo: required
+      os: osx
+      language: node_js
+before_script:
+  - if [ "${CN!_PLATFORM}" == "android" ]; then
+      nvm install 6
+      echo `which node`
+      android list targets
+      echo no | android create avd --force -n test -t android-${TRAVIS_BRANCH} --abi google_apis/armeabi-v7a
+      emulator -avd test -no-window &
+    fi
 script:
-  - curl -L http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.6-bin.tar.gz -o apache-ant-1.9.6-bin.tar.gz
-  - tar xfz apache-ant-1.9.6-bin.tar.gz --directory ../
-  - export PATH=`pwd`/../apache-ant-1.9.6/bin:$PATH
-  - curl -L https://archive.apache.org/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz -o apache-maven-3.2.3-bin.tar.gz
-  - tar xvfz apache-maven-3.2.3-bin.tar.gz --directory ../
-  - export PATH=`pwd`/../apache-maven-3.2.3/bin:$PATH
-  - bash .travis/build.sh
+  - if [ "${CN1_PLATFORM}" == "ios" ]; then
+      curl -L http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.6-bin.tar.gz -o apache-ant-1.9.6-bin.tar.gz
+      tar xfz apache-ant-1.9.6-bin.tar.gz --directory ../
+      export PATH=`pwd`/../apache-ant-1.9.6/bin:$PATH
+      curl -L https://archive.apache.org/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz -o apache-maven-3.2.3-bin.tar.gz
+      tar xvfz apache-maven-3.2.3-bin.tar.gz --directory ../
+      export PATH=`pwd`/../apache-maven-3.2.3/bin:$PATH
+      bash .travis/build.sh
+    fi
+  - if [ "${CN1_PLATFORM}" == "android"]; then
+      echo "We are in android"
+    fi
