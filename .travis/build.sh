@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# set -e so that this script will exit if any of the commands fail
 set -e
 
 if [ "${CN1_PLATFORM}" == "android" ]; then
@@ -152,7 +154,7 @@ if [[ -n ${CN1_RUNTESTS_ANDROID_EMULATOR} ]]; then
 
 
   echo "Waiting for Emulator..."
-  bash ../cn1-unit-tests-android/.travis/android-waiting-for-emulator.sh || exit 1
+  bash .travis/android-waiting-for-emulator.sh
   adb shell settings put global window_animation_scale 0 &
   adb shell settings put global transition_animation_scale 0 &
   adb shell settings put global animator_duration_scale 0 &
