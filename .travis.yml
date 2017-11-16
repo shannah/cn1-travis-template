@@ -5,7 +5,7 @@ matrix:
   include:
     - language: android
       jdk: oraclejdk8
-      env: CN1_PLATFORM=android
+      env: CN1_PLATFORM=android CN1_RUNTESTS_ANDROID_EMULATOR=1
       android:
         components:
           - platform-tools
@@ -47,24 +47,5 @@ matrix:
       os: osx
       language: node_js
 
-before_script:
-  - if [ "${CN1_PLATFORM}" == "android" ]; then
-      nvm install 6;
-      echo `which node`;
-      android list targets;
-      echo no | android create avd --force -n test -t android-${TRAVIS_BRANCH} --abi google_apis/armeabi-v7a;
-      emulator -avd test -no-window &;
-    fi
 script:
-  - if [ "${CN1_PLATFORM}" == "ios" ]; then
-      curl -L http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.6-bin.tar.gz -o apache-ant-1.9.6-bin.tar.gz;
-      tar xfz apache-ant-1.9.6-bin.tar.gz --directory ../;
-      export PATH=`pwd`/../apache-ant-1.9.6/bin:$PATH;
-      curl -L https://archive.apache.org/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz -o apache-maven-3.2.3-bin.tar.gz;
-      tar xvfz apache-maven-3.2.3-bin.tar.gz --directory ../;
-      export PATH=`pwd`/../apache-maven-3.2.3/bin:$PATH;
-      bash .travis/build.sh;
-    fi
-  - if [ "${CN1_PLATFORM}" == "android" ]; then
-      echo "We are in android";
-    fi
+  - bash .travis/build.sh;
