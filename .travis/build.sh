@@ -15,7 +15,21 @@ if [ "${CN1_PLATFORM}" == "android" ]; then
   android list targets
 
   echo "Creating AVD..."
-  echo no | android create avd --force -n test -t android-18 --abi google_apis/armeabi-v7a
+  if ["${API}" == "15" ] then;
+    echo no | android create avd --force -n test -t android-15--abi google_apis/armeabi-v7a
+  elif [ "${API}" == "16" ] then;
+    - echo no | android create avd --force -n test -t android-16 --abi armeabi-v7a
+  elif [ "${API}" == "17" ] then;
+    echo no | android create avd --force -n test -t android-17--abi google_apis/armeabi-v7a
+  elif [ "${API}" == "18" ] then;
+    echo no | android create avd --force -n test -t android-18 --abi google_apis/armeabi-v7a
+  elif [ "${API}" == "19" ] then;
+    echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a
+  elif [ "${API}" == "21" ] then;
+    echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
+  elif [ "${API}" == "22" ] then;
+    echo no | android create avd --force -n test -t android-22--abi armeabi-v7a
+  fi
 
   echo "Starting Android Emulator..."
   emulator -avd test -no-window &
