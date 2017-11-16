@@ -3,6 +3,11 @@ set -e
 
 if [ "${CN1_PLATFORM}" == "android" ]; then
   echo "Installing Node 6"
+
+  # Need to load NVM command first
+  # https://github.com/BanzaiMan/travis_production_test/blob/9c02aef/.travis.yml
+  # https://github.com/travis-ci/travis-ci/issues/5999#issuecomment-217201571
+  source ~/.nvm/nvm.sh
   nvm install 6
   echo `which node`
   android list targets
