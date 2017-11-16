@@ -104,6 +104,9 @@
         <echo message="nativeios = ${override.nativeios.jar}"/>
         <echo message="${cn1.iphone.target}"/>
         
+        <condition property="dist.apk" value="${codename1.mainName}-debug.apk" else="${codename1.mainName}-release.apk">
+            <istrue value="${codename1.arg.android.debug}"/>
+        </condition>
         <codeNameOne 
             jarFile="dist/unitTests.jar"
             displayName="${codename1.displayName}"
@@ -129,7 +132,7 @@
         <exec executable="mvn" dir="dist/cn1-appium-android-master" failonerror="true">
             <arg value="test"/>
             <arg value="-e"/>
-            <arg value="-Dapp=../CodenameOneUnitTestExecutor.apk"/>
+            <arg value="-Dapp=../${dist.apk}"/>
             <!--  Uncomment/Customize as appropriate for your environment -->
             <!-- <arg value="-Dappium.url=http://127.0.0.1:4723/wd/hub"/> -->
             <!-- <arg value="-DdeviceName='iPhone 6s'"/> -->
