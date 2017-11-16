@@ -6,6 +6,11 @@ matrix:
     - language: android
       jdk: oraclejdk8
       env: CN1_PLATFORM=android CN1_RUNTESTS_ANDROID_EMULATOR=1
+      addons:
+      apt:
+        packages:
+          - ant
+          - maven
       android:
         components:
           - platform-tools
