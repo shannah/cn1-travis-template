@@ -15,19 +15,19 @@ if [ "${CN1_PLATFORM}" == "android" ]; then
   android list targets
 
   echo "Creating AVD..."
-  if ["${API}" == "15" ] then;
+  if [ "${API}" -eq "15" ] then;
     echo no | android create avd --force -n test -t android-15--abi google_apis/armeabi-v7a
-  elif [ "${API}" == "16" ] then;
+  elif [ "${API}" -eq "16" ] then;
     - echo no | android create avd --force -n test -t android-16 --abi armeabi-v7a
-  elif [ "${API}" == "17" ] then;
+  elif [ "${API}" -eq "17" ] then;
     echo no | android create avd --force -n test -t android-17--abi google_apis/armeabi-v7a
-  elif [ "${API}" == "18" ] then;
+  elif [ "${API}" -eq "18" ] then;
     echo no | android create avd --force -n test -t android-18 --abi google_apis/armeabi-v7a
-  elif [ "${API}" == "19" ] then;
+  elif [ "${API}" -eq "19" ] then;
     echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a
-  elif [ "${API}" == "21" ] then;
+  elif [ "${API}" -eq "21" ] then;
     echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
-  elif [ "${API}" == "22" ] then;
+  elif [ "${API}" -eq "22" ] then;
     echo no | android create avd --force -n test -t android-22--abi armeabi-v7a
   fi
 
@@ -80,7 +80,10 @@ CN1=`pwd`/node_modules/.bin/cn1
 cd $PROJECT_DIR
 
 # Install missing jar files into project
+echo "$CN1 install-jars"
 $CN1 install-jars || true
+
+echo "$CN1 install-tests"
 $CN1 install-tests || true
 
 # If CN1_SOURCES environment variable is set, then we download the CN1_SOURCES
