@@ -192,7 +192,7 @@ if [[ -n ${CN1_RUNTESTS_ANDROID_EMULATOR} ]]; then
     -Dcodename1.android.keystorePassword="password"
 fi
 
-if [[ -n $CN1_RUNTESTS_IOS_DEVICE && -n ${CN1PASS} && -n ${CN1USER} ]]; then
+if [[ -n $CN1_RUNTESTS_IOS_DEVICE ]]; then
   echo "Running Tests on iOS Device"
 
   $CN1 install-appium-tests || true

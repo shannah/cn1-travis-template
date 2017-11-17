@@ -5,12 +5,31 @@
     <property name="cn1.iphone.target" value="iphone"/>
     <property name="cn1.android.target" value="android"/>
     
-    <target name="test-ios-appium-simulator-with-cn1sources">
+    <target name="compile-iosport" unless="iOSPort.present">
+        <ant antfile="build.xml" dir="${project.iOSPort}" target="jar" inheritAll="false" useNativeBasedir="true"/>
+    </target>
+    <target name="compile-bytecodetranslator" unless="ByteCodeTranslator.present">
+        <ant antfile="build.xml" dir="${project.ByteCodeTranslator}" target="jar" inheritAll="false" useNativeBasedir="true"/>
+    </target>
+    <target name="compile-javaapi" unless="JavaAPI.present">
+        <ant antfile="build.xml" dir="${project.JavaAPI}" target="jar" inheritAll="false" useNativeBasedir="true"/>
+    </target>
+    <target name="test-ios-appium-simulator-with-sources">
         <property name="cn1.sources" value="../cn1"/>
         <property name="project.iOSPort" value="${cn1.sources}/Ports/iOSPort"/>
-        <ant antfile="build.xml" dir="${project.iOSPort}" target="jar" inheritAll="false" useNativeBasedir="true"/>
+        <property name="project.ByteCodeTranslator" value="${cn1.sources}/vm/ByteCodeTranslator"/>
+        <property name="project.JavaAPI" value="${cn1.sources}/vm/JavaAPI"/>
+        
+        <available file="${project.iOSPort}/dist/iOSPort.jar" property="iOSPort.present"/>
+        <available file="${project.ByteCodeTranslator}/dist/ByteCodeTranslator.jar" property="ByteCodeTranslator.present"/>
+        <available file="${project.JavaAPI}/dist/JavaAPI.jar" property="JavaAPI.present"/>
+        <antcall target="compile-iosport"/>
+        <antcall target="compile-bytecodetranslator"/>
+        <antcall target="compile-javaapi"/>
         <property name="override.iOSPort.jar" value="${project.iOSPort}/dist/iOSPort.jar"/>
         <property name="override.nativeios.jar" value="${project.iOSPort}/dist/nativeios.jar"/>
+        <property name="override.JavaAPI.jar" value="${project.JavaAPI}/dist/JavaAPI.jar"/>
+        <property name="override.ByteCodeTranslator.jar" value="${project.ByteCodeTranslator}/dist/ByteCodeTranslator.jar"/>
         <antcall target="test-ios-appium-simulator"/>
     </target>
     
@@ -100,9 +119,6 @@
     <target name="test-android-appium-emulator" 
             description="Test in Android Emulator"
             depends="clean,copy-android-override,copy-libs,compile-test,clean-override">
-        <echo message="iOSPort = ${override.iOSPort.jar}"/>
-        <echo message="nativeios = ${override.nativeios.jar}"/>
-        <echo message="${cn1.iphone.target}"/>
         
         <condition property="dist.apk" value="${codename1.mainName}-debug.apk" else="${codename1.mainName}-release.apk">
             <istrue value="${codename1.arg.android.debug}"/>
