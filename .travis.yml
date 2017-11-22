@@ -3,6 +3,12 @@ env:
     - CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
 matrix:
   include:
+    - language: java
+      env: CN1_PLATFORM=javase CN1_RUNTESTS_JAVASE=1
+      jdk: oraclejdk8
+      before_script:
+        - "export DISPLAY=:99.0"
+        - "sh -e /etc/init.d/xvfb start"
 ##<CN1:android-15>##
     - language: android
       jdk: oraclejdk8

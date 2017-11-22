@@ -3,6 +3,15 @@
 # set -e so that this script will exit if any of the commands fail
 set -e
 
+if [ -z "${CN1USER}" ] || [ -z "${CN1PASS}" ]; then
+  if [ -n "${CN1_RUNTESTS_ANDROID_EMULATOR}" ] || [ -n "${CN1_RUNTESTS_IOS_SIMULATOR}" ]; then
+    echo "Running tests on android or iOS requires the CN1USER and CN1PASS environment variables to be set to your Codename One username and password"
+    echo "NOTE: Running tests on iOS and Android requires an enterprise account or higher, since they rely on automated build support"
+    exit 1
+  fi
+fi
+
+
 if [ "${CN1_PLATFORM}" == "android" ]; then
   echo "Installing Node 6"
 
@@ -93,29 +102,10 @@ if [[ -n ${CN1_SOURCES} ]]; then
   curl -L ${CN1_SOURCES} -o  master.zip
   unzip master.zip -d ../
   rm master.zip
-  mv ../CodenameOne-master ../CodenameOne
-  curl -L https://github.com/codenameone/cn1-binaries/archive/master.zip -o master.zip
-  unzip master.zip -d ../
-  mv ../cn1-binaries-master ../cn1-binaries
-  rm master.zip
-  curl -L https://github.com/codenameone/codenameone-skins/archive/master.zip -o master.zip
-  unzip master.zip -d ../
-  mv ../codenameone-skins-master ../codenameone-skins
-  cd ../codenameone-skins
-  ./build_skins.sh
-  mv ../CodenameOne ../cn1
+  mv ../CodenameOne-master ../cn1
   cd ../cn1
-  cd CodenameOne
-  ant jar
-  cd ../CodenameOneDesigner
-  mkdir dist
-  mkdir dist/lib
-  ant release
-  cd ../Ports/CLDC11
-  ant jar
-  cd ../JavaSE
-  ant jar
-  cd ../..
+  ant all
+
   cp CodenameOne/dist/CodenameOne.jar $PROJECT_DIR/lib/CodenameOne.jar
   cp Ports/CLDC11/dist/CLDC11.jar $PROJECT_DIR/lib/CLDC11.jar
   cp Ports/JavaSE/dist/JavaSE.jar $PROJECT_DIR/JavaSE.jar
