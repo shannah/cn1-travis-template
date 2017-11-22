@@ -118,7 +118,7 @@ ant jar
 if [[ -n ${CN1_RUNTESTS_JAVASE} ]]; then
   mkdir dist/testrunner
   cd dist/testrunner
-  echo "<?xml version='1.0'?>\n<tests><test path='${PROJECT_DIR}'/></tests>" > tests.xml
+  echo -e "<?xml version='1.0'?>\n<tests><test path='${PROJECT_DIR}'/></tests>" > tests.xml
   echo "tests.xml content:"
   cat tests.xml
   if [[ -n ${CN1_SOURCES} ]]; then
