@@ -120,9 +120,9 @@ if [[ -n ${CN1_RUNTESTS_JAVASE} ]]; then
   cd dist/testrunner
   echo '<?xml version='1.0'?>\n<tests><test path='${PROJECT_DIR}'/></tests>' > tests.xml
   if [[ -n ${CN1_SOURCES} ]]; then
-    cn1 test -s -e -cn1Sources ${PROJECT_DIR}/../cn1 -skipCompileCn1Sources
+    $CN1 test -s -e -cn1Sources ${PROJECT_DIR}/../cn1 -skipCompileCn1Sources
   else
-    cn1 test -s -e
+    $CN1 test -s -e
   fi
   cd ../..
 fi
