@@ -105,7 +105,6 @@ if [[ -n ${CN1_SOURCES} ]]; then
   mv ../CodenameOne-master ../cn1
   cd ../cn1
   ant all
-
   cp CodenameOne/dist/CodenameOne.jar $PROJECT_DIR/lib/CodenameOne.jar
   cp Ports/CLDC11/dist/CLDC11.jar $PROJECT_DIR/lib/CLDC11.jar
   cp Ports/JavaSE/dist/JavaSE.jar $PROJECT_DIR/JavaSE.jar
@@ -117,8 +116,15 @@ ant jar
 
 # Run Tests Against JavaSE
 if [[ -n ${CN1_RUNTESTS_JAVASE} ]]; then
-  $CN1 install-tests || true
-  ant -f tests.xml test-javase
+  mkdir dist/testrunner
+  cd dist/testrunner
+  echo '<?xml version='1.0'?>\n<tests><test path='${PROJECT_DIR}'/></tests>' > tests.xml
+  if [[ -n ${CN1_SOURCES} ]]; then
+    cn1 test -s -e -cn1Sources ${PROJECT_DIR}/../cn1 -skipCompileCn1Sources
+  else
+    cn1 test -s -e
+  fi
+  cd ../..
 fi
 
 if [[ -n ${CN1_RUNTESTS_IOS_SIMULATOR} ]]; then
