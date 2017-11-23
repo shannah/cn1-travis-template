@@ -1,6 +1,8 @@
 env:
   global:
-    - CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
+# CN1_SOURCES environment variable for internal use only
+# DO NOT UNCOMMENT THIS LINE!!!
+#     - CN1_SOURCES=https://github.com/codenameone/CodenameOne/archive/master.zip
 matrix:
   include:
 ##<CN1:javase-8>##
