@@ -13,22 +13,22 @@ matrix:
         - "export DISPLAY=:99.0"
         - "sh -e /etc/init.d/xvfb start"
 ##</CN1:javase-8>##
-##<CN1:android-15>##
-    - language: android
-      jdk: oraclejdk8
-      env: CN1_PLATFORM=android API=15 CN1_RUNTESTS_ANDROID_EMULATOR=1
-      addons:
-        apt:
-          packages:
-            - ant
-            - maven
-      android:
-        components:
-          - platform-tools
-          - android-15
-          - addon-google_apis-google-15
-          - sys-img-armeabi-v7a-google_apis-15
-##</CN1:android-15>##
+# ##-<CN1:android-15>##
+#     - language: android
+#       jdk: oraclejdk8
+#       env: CN1_PLATFORM=android API=15 CN1_RUNTESTS_ANDROID_EMULATOR=1
+#       addons:
+#         apt:
+#           packages:
+#             - ant
+#             - maven
+#       android:
+#         components:
+#           - platform-tools
+#           - android-15
+#           - addon-google_apis-google-15
+#           - sys-img-armeabi-v7a-google_apis-15
+# ##-</CN1:android-15>##
 ##<CN1:android-16>##
     - language: android
       jdk: oraclejdk8
