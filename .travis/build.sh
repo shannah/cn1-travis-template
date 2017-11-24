@@ -143,8 +143,8 @@ if [[ -n ${CN1_RUNTESTS_IOS_SIMULATOR} ]]; then
     kill $APPIUM_PID
   }
   trap stop_appium EXIT
-  ant -f appium.xml test-ios-appium-simulator -Dcn1.iphone.target=debug_iphone_steve -Dcn1user=${CN1USER} -Dcn1password=${CN1PASS}
-
+  #ant -f appium.xml test-ios-appium-simulator -Dcn1.iphone.target=debug_iphone_steve -Dcn1user=${CN1USER} -Dcn1password=${CN1PASS}
+  ant -f appium.xml test-ios-appium-simulator -Dcn1user=${CN1USER} -Dcn1password=${CN1PASS}
 fi
 
 if [[ -n ${CN1_RUNTESTS_ANDROID_EMULATOR} ]]; then
