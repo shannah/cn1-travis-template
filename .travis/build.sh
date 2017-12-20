@@ -3,6 +3,12 @@
 # set -e so that this script will exit if any of the commands fail
 set -e
 
+function command_exists {
+  #this should be a very portable way of checking if something is on the path
+  #usage: "if command_exists foo; then echo it exists; fi"
+  command -v "$1" &> /dev/null
+}
+
 if [ -z "${CN1USER}" ] || [ -z "${CN1PASS}" ]; then
   if [ -n "${CN1_RUNTESTS_ANDROID_EMULATOR}" ] || [ -n "${CN1_RUNTESTS_IOS_SIMULATOR}" ]; then
     echo "Running tests on android or iOS requires the CN1USER and CN1PASS environment variables to be set to your Codename One username and password"
@@ -52,16 +58,19 @@ if [ "${CN1_PLATFORM}" == "android" ]; then
   trap stop_emulator EXIT
 fi
 if [ "${CN1_PLATFORM}" == "ios" ]; then
-  echo "Installing Ant..."
-  # Install ANT and Maven.  They are missing from iOS machines
-  curl -L http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.6-bin.tar.gz -o apache-ant-1.9.6-bin.tar.gz
-  tar xfz apache-ant-1.9.6-bin.tar.gz --directory ../
-  export PATH=`pwd`/../apache-ant-1.9.6/bin:$PATH
-
-  echo "Installing Maven"
-  curl -L https://archive.apache.org/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz -o apache-maven-3.2.3-bin.tar.gz
-  tar xvfz apache-maven-3.2.3-bin.tar.gz --directory ../
-  export PATH=`pwd`/../apache-maven-3.2.3/bin:$PATH
+  if ! command_exists ant; then
+    echo "Installing Ant..."
+    # Install ANT and Maven.  They are missing from iOS machines
+    curl -L http://archive.apache.org/dist/ant/binaries/apache-ant-1.9.6-bin.tar.gz -o apache-ant-1.9.6-bin.tar.gz
+    tar xfz apache-ant-1.9.6-bin.tar.gz --directory ../
+    export PATH=`pwd`/../apache-ant-1.9.6/bin:$PATH
+  fi
+  if ! command_exists mvn; then
+    echo "Installing Maven"
+    curl -L https://archive.apache.org/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz -o apache-maven-3.2.3-bin.tar.gz
+    tar xvfz apache-maven-3.2.3-bin.tar.gz --directory ../
+    export PATH=`pwd`/../apache-maven-3.2.3/bin:$PATH
+  fi
 fi
 
 if [ "${CN1_PLATFORM}" == "android" ]; then
@@ -133,10 +142,18 @@ if [[ -n ${CN1_RUNTESTS_IOS_SIMULATOR} ]]; then
   echo "Running tests on IOS SIMULATOR"
 
   $CN1 install-appium-tests || true
-  echo "Installing appium..."
-  npm install appium
-  ./node_modules/.bin/appium &
-  APPIUM_PID=$!
+  if (false && command -v appium 2>/dev/null); then
+    pkill -f appium || true
+    appium &
+    APPIUM_PID=$!
+  else
+    echo "Appium missing.  Installing appium..."
+
+    npm install appium
+    pkill -f appium || true
+    ./node_modules/.bin/appium &
+    APPIUM_PID=$!
+  fi
 
   # Travis will hang after script completion if we don't kill appium
   function stop_appium() {
@@ -195,17 +212,25 @@ if [[ -n $CN1_RUNTESTS_IOS_DEVICE ]]; then
 
   $CN1 install-appium-tests || true
 
-  echo "Installing appium..."
-  npm install appium
-  ./node_modules/.bin/appium &
-  APPIUM_PID=$!
+
+  if command -v appium 2>/dev/null; then
+    echo "Appium missing.  Installing appium..."
+    pkill -f appium || true
+    appium &
+    APPIUM_PID=$!
+  else
+    npm install appium
+    ./node_modules/.bin/appium &
+    pkill -f appium || true
+    APPIUM_PID=$!
+  fi
 
   # Travis will hang after script completion if we don't kill appium
   function stop_appium() {
     kill $APPIUM_PID
   }
   trap stop_appium EXIT
-
+  export PLATFORM_VERSION=$DEVICE
   ant -f appium.xml test-ios-appium-device -Dcn1user=${CN1USER} -Dcn1password=${CN1PASS}
 fi
 exit 0
